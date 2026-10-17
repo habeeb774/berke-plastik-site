@@ -58,6 +58,10 @@ async function start(){
 
  // lists
  const SCH=SCH_G;Object.assign(SCH,{
+  nav:{title:'🔝 الشريط العلوي',sub:'روابط القائمة العلوية — أضف/احذف/رتّب. الرابط: #products أو #about أو #why أو #catalogues أو #contact، أو رابط https:// خارجي.',item:'رابط',fields:[['label','النص'],['href','الرابط']],
+   seed:d=>[...d.querySelectorAll('[data-list=nav] a')].map(a=>({label:a.textContent.trim(),href:a.getAttribute('href')||'#'}))},
+  footcols:{title:'🔚 الشريط السفلي',sub:'أعمدة أسفل الموقع. كل سطر في الأسطر يظهر سطراً؛ لجعله رابطاً اكتب: النص | الرابط',item:'عمود',fields:[['title','عنوان العمود'],['lines','الأسطر','area']],
+   seed:d=>[...d.querySelectorAll('[data-list=footcols]>div')].map(c=>({title:c.querySelector('h4')?.textContent.trim()||'',lines:[...c.querySelectorAll('p span')].map(x=>x.textContent.trim()).join('\n')}))},
   products:{title:'📦 المنتجات',sub:'بطاقات المنتجات — أضف/احذف/رتّب، ولكل منتج صورته.',item:'منتج',fields:[['media','صورة المنتج','image'],['title','الاسم'],['desc','الوصف','area'],['chips','المواصفات (افصل بفاصلة ,)']],
    seed:d=>[...d.querySelectorAll('[data-list=products] .pcard')].map(c=>({media:null,title:c.querySelector('h3')?.textContent.trim()||'',desc:c.querySelector('p')?.textContent.trim()||'',chips:[...c.querySelectorAll('.chips li')].map(x=>x.textContent.trim()).join(', ')}))},
   metrics:{title:'🔢 الأرقام',sub:'المربعات في قسم «عن بيركة».',item:'رقم',fields:[['value','الرقم'],['label','الوصف']],
@@ -108,7 +112,7 @@ function drawList(k,p){const S=SCH_G[k];p.querySelectorAll('.litem,.addrow').for
     const lb=mk('label','pri addbtn',type==='image'?'📤 صورة':'📤 ملف PDF');const inp=mk('input');inp.type='file';inp.accept=type==='image'?'image/*':'application/pdf';inp.className='hide';lb.appendChild(inp);
     inp.onchange=async()=>{const fl=inp.files[0];if(!fl)return;lb.firstChild.textContent='⏳ جارٍ الرفع…';try{it[f]=await upMedia(fl,type==='image');markL(k);msg('تم الرفع — اضغط حفظ');drawList(k,p)}catch(e){alert('تعذر الرفع: '+e.message);lb.firstChild.textContent='📤 إعادة المحاولة'}};
     row.appendChild(lb);if(it[f]){const rm=mk('button','reset','إزالة');rm.type='button';rm.onclick=()=>{it[f]=null;markL(k);drawList(k,p)};row.appendChild(rm)}box.appendChild(row)}
-   else{const inp=type==='area'?mk('textarea'):mk('input');if(type!=='area')inp.type='text';inp.value=it[f]||'';if(type==='area')inp.rows=2;inp.oninput=()=>{it[f]=inp.value;box.classList.add('changed');markL(k)};box.appendChild(inp)}});
+   else{const inp=type==='area'?mk('textarea'):mk('input');if(type!=='area')inp.type='text';inp.value=it[f]||'';if(type==='area')inp.rows=f==='lines'?5:2;inp.oninput=()=>{it[f]=inp.value;box.classList.add('changed');markL(k)};box.appendChild(inp)}});
   p.appendChild(box)});
  const add=mk('button','pri addrow','➕ إضافة '+S.item);add.type='button';add.onclick=()=>{const o={};S.fields.forEach(([f])=>o[f]=null);L.push(o);markL(k);drawList(k,p)};p.appendChild(add)}
 async function upMedia(file,isImg){

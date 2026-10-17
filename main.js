@@ -1,8 +1,9 @@
 (()=>{const n=document.querySelector('.nav'),b=document.querySelector('.hamb');if(n&&b){
 b.addEventListener('click',()=>{const o=n.classList.toggle('open');b.setAttribute('aria-expanded',o)});
-n.querySelectorAll('.links a').forEach(a=>a.addEventListener('click',()=>{n.classList.remove('open');b.setAttribute('aria-expanded','false')}));}
+n.addEventListener('click',e=>{if(e.target.closest('.links a')){n.classList.remove('open');b.setAttribute('aria-expanded','false')}});}
 const setText=(el,v)=>{el.textContent='';v.split('\n').forEach((l,i)=>{if(i)el.appendChild(document.createElement('br'));el.appendChild(document.createTextNode(l))})};
 
+const safeHref=h=>{h=String(h||'').trim();return /^(#[\w-]*|https:\/\/|mailto:|tel:|\/)/i.test(h)?h:'#'};
 const E=(t,c,x)=>{const e=document.createElement(t);if(c)e.className=c;if(x!=null)e.textContent=x;return e};
 const R={
  products:(box,L)=>L.forEach(p=>{const a=E('article','pcard'),im=E('div','pimg'+(p.media?'':' ppr'));if(p.media)im.style.backgroundImage=`url("/api/media?id=${p.media}")`;
@@ -10,6 +11,8 @@ const R={
  metrics:(box,L)=>L.forEach(m=>{const d=E('div','metric');d.append(E('b',null,m.value||''),E('small',null,m.label||''));box.appendChild(d)}),
  ticks:(box,L)=>L.forEach(t=>{const d=E('div');d.append(E('b',null,'✓'),document.createTextNode(' '+(t.text||'')));box.appendChild(d)}),
  badges:(box,L)=>L.forEach(t=>box.appendChild(E('span',null,t.text||''))),
+ nav:(box,L)=>L.forEach(x=>{if(!x.label)return;const a=E('a',null,x.label);a.href=safeHref(x.href);if(/^https?:/.test(a.getAttribute('href'))){a.target='_blank';a.rel='noopener noreferrer'}box.appendChild(a)}),
+ footcols:(box,L)=>L.forEach(c=>{const d=E('div');if(c.title)d.appendChild(E('h4',null,c.title));const p=E('p');String(c.lines||'').split('\n').map(x=>x.trim()).filter(Boolean).forEach((ln,i)=>{if(i)p.appendChild(E('br'));const[t,h]=ln.split('|').map(x=>x.trim());if(h){const a=E('a',null,t);a.href=safeHref(h);a.style.display='inline';if(/^https?:/.test(a.getAttribute('href'))){a.target='_blank';a.rel='noopener noreferrer'}p.appendChild(a)}else p.appendChild(document.createTextNode(t))});d.appendChild(p);box.appendChild(d)}),
  catalogs:(box,L)=>L.forEach(c=>{const a=E('a','ccard');a.href=c.media?`/api/media?id=${c.media}&dl=1`:(c.url||'#');if(!c.media&&/^https?:/.test(c.url||'')){a.target='_blank';a.rel='noopener noreferrer'}
   a.append(E('b',null,c.title||''),E('small',null,c.note||''),E('span',null,'تحميل ↓'));box.appendChild(a)})};
 const okUrl=v=>/^(https:\/\/|mailto:|tel:)/i.test(v);
