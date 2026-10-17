@@ -22,6 +22,7 @@ export default safe(async function(req,res){
     const [t,l]=await Promise.all([sql`select k,v from site_text`,sql`select k,v from site_list`]);
     const T=Object.fromEntries(t.map(r=>[r.k,r.v])), Ls=Object.fromEntries(l.map(r=>[r.k,r.v]));
     html=html.replace(/<span data-k="([\w]+)">([\s\S]*?)<\/span>/g,(m,k,inner)=>T[k]!=null?`<span data-k="${k}">${txt(T[k])}</span>`:m);
+    {const FONTS=['Cairo','Tajawal','Almarai','Alexandria','Noto Kufi Arabic','Readex Pro','Changa','El Messiri','Rubik','Noto Sans Arabic','Baloo Bhaijaan 2'];if(T.font&&FONTS.includes(T.font)){const fam=T.font.replace(/ /g,'+');html=html.replace(/<link rel="stylesheet" href="https:\/\/fonts\.googleapis\.com\/css2\?family=IBM[^"]*">/,`<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=${fam}:wght@400;500;600;700&display=swap">`);}}
     if(T.title) html=html.replace(/<title>[\s\S]*?<\/title>/,`<title>${esc(T.title)}</title>`);
     if(T.contact&&/^(https:\/\/|mailto:|tel:)/i.test(T.contact)) html=html.replace(/(<a data-contact[^>]*?href=")[^"]*/,`$1${esc(T.contact)}`);
     for(const[k,f]of Object.entries(R)){const L=Ls[k];if(!Array.isArray(L))continue;
