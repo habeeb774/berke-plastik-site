@@ -80,3 +80,10 @@ h1,h2,h3,.hero h1,.hero h1>span{font-weight:600!important}
 .ccard b{font-weight:600;font-size:17px}
 .ccard>span{font-weight:600}
 @media(max-width:800px){.qform{padding:16px}}
+/* proof balance */
+.proof-grid{gap:48px;grid-template-columns:1.1fr 1fr}
+.proof-img{min-height:400px;border-radius:4px}
+.proof h2{font-size:clamp(26px,3vw,36px)}
+.ticks{font-weight:500;gap:10px;margin:16px 0 22px}
+.certs>span{border-width:1px;font-weight:600;font-size:12.5px;padding:7px 12px}
+@media(max-width:800px){.proof-grid{grid-template-columns:1fr;gap:24px}.proof-img{min-height:240px}}
