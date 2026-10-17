@@ -69,3 +69,8 @@ header{padding:12px 24px;padding-right:318px}
 :root[data-theme=light] .pri{color:#fff}
 #theme{min-width:38px;justify-content:center}
 textarea{resize:none}
+.ptitle{color:var(--tx)!important}
+#panels{max-width:1200px;margin-inline:auto}
+.sbrand img{width:46px;height:46px;padding:4px;border:1px solid var(--line)}
+.side button.on{border-width:1px}
+:root[data-theme=light] .side button.on{border-color:#bfe0ee}
