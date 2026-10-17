@@ -20,10 +20,10 @@ const R={
   a.append(E('b',null,c.title||''),E('small',null,c.note||''),E('span',null,'تحميل ↓'));box.appendChild(a)})};
 const okUrl=v=>/^(https:\/\/|mailto:|tel:)/i.test(v);
 fetch('/api/content').then(r=>r.ok?r.json():null).then(d=>{if(!d)return;const t=d.t||{};
- window.__img=d.img||{};document.querySelectorAll('[data-hide-empty]').forEach(s=>{const L=(d.lists||{})[s.dataset.hideEmpty];s.classList.toggle('hide',!(Array.isArray(L)&&L.length))});
+ window.__img=d.img||{};const FONTS=['IBM Plex Sans Arabic','Cairo','Tajawal','Almarai','Alexandria','Noto Kufi Arabic','Readex Pro','Changa','El Messiri','Rubik','Noto Sans Arabic','Baloo Bhaijaan 2'];if(t.font&&FONTS.includes(t.font)&&t.font!=='IBM Plex Sans Arabic'){const l=document.createElement('link');l.rel='stylesheet';l.href='https://fonts.googleapis.com/css2?family='+t.font.replace(/ /g,'+')+':wght@400;500;600;700&display=swap';document.head.appendChild(l);document.documentElement.style.setProperty('--font',`'${t.font}'`)}document.querySelectorAll('[data-hide-empty]').forEach(s=>{const L=(d.lists||{})[s.dataset.hideEmpty];s.classList.toggle('hide',!(Array.isArray(L)&&L.length))});
  for(const[k,L]of Object.entries(d.lists||{})){const box=document.querySelector(`[data-list="${k}"]`);if(box&&R[k]&&Array.isArray(L)){box.textContent='';R[k](box,L)}}
  for(const[k,v]of Object.entries(t))if(k.startsWith('color_')&&/^#[0-9a-fA-F]{6}$/.test(v))document.documentElement.style.setProperty('--'+k.slice(6),v);
- for(const[k,v]of Object.entries(t)){if(k==='title'){document.title=v;continue}if(k==='contact'||k==='wa'||k.startsWith('color_'))continue;document.querySelectorAll(`[data-k="${k}"]`).forEach(el=>setText(el,v))}
+ for(const[k,v]of Object.entries(t)){if(k==='title'){document.title=v;continue}if(k==='contact'||k==='wa'||k==='font'||k.startsWith('color_'))continue;document.querySelectorAll(`[data-k="${k}"]`).forEach(el=>setText(el,v))}
  if(t.contact&&okUrl(t.contact))document.querySelectorAll('[data-contact]').forEach(a=>{a.href=t.contact});
  window.__wa=t.wa;if(t.wa){const num=t.wa.replace(/\D/g,'');if(num.length>=9)document.querySelectorAll('[data-wa]').forEach(a=>{a.href='https://wa.me/'+num;a.target='_blank';a.rel='noopener noreferrer';a.classList.remove('hide')})}
  for(const[k,ver]of Object.entries(d.img||{}))document.querySelectorAll(`[data-img="${k}"]`).forEach(el=>{const u=`url("/api/image?k=${k}&v=${ver}")`;
