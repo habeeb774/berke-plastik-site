@@ -53,3 +53,6 @@ section{scroll-margin-top:80px}.products,.catalogs{padding:90px 0}.intro,.proof{
 
 .links a{font-weight:500!important}.agent{font-weight:600!important}
 h1,h2,h3,.hero h1,.hero h1>span{font-weight:600!important}
+.products,.catalogs,.intro,.proof,.adv,.tl,.projects,.quotesec,.contact{padding:56px 0}
+.products+.intro,.intro+.proof,.proof+.catalogs{padding-top:16px}
+@media(max-width:800px){.products,.catalogs,.intro,.proof,.adv,.tl,.projects,.quotesec,.contact{padding:40px 0}}
