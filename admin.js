@@ -1,5 +1,5 @@
-const SCH_G={};
-const IM=[["logo","الشعار","أعلى وأسفل الموقع","berke-logo-horizontal.png"],["hero","صورة الواجهة","الصورة الكبيرة أعلى الصفحة",""],["ppr","منتج PP-R","قسم المنتجات",""],["rad","منتج المشعات","قسم المنتجات",""],["pex","منتج PE-X","قسم المنتجات",""],["brass","منتج الوصلات النحاسية","قسم المنتجات",""],["proof","صورة «لماذا بيركة»","بجانب قائمة المميزات",""]];
+const SCH_G={};let IMGV={};
+const IM=[["logo","الشعار","أعلى وأسفل الموقع","berke-logo-horizontal.png"],["hero","صورة الواجهة","الصورة الكبيرة أعلى الصفحة",""],["proof","صورة «لماذا بيركة»","بجانب قائمة المميزات",""]];
 const SECTIONS=[["header","القائمة العلوية","روابط القائمة واسم الوكيل"],["home","الواجهة الرئيسية","العنوان الكبير والأزرار"],["bar","شريط الوكيل","الشريط الأزرق أسفل الواجهة"],["products","المنتجات","بطاقات المنتجات والمقاسات"],["about","عن بيركة","التعريف بالشركة والأرقام"],["why","لماذا بيركة","المميزات والشهادات"],["advantages","مزايا للمشاريع","عنوان القسم"],["history","الخط الزمني","عنوان القسم"],["projects","المشاريع","عنوان القسم"],["quote","نموذج عرض السعر","نصوص النموذج"],["contact","تواصل معنا","بيانات الوكيل"],["catalogues","الكتالوجات","قسم تحميل الكتالوجات"],["footer","أسفل الموقع","بيانات الشركة والروابط"]];
 const $=s=>document.querySelector(s),mk=(t,c,x)=>{const e=document.createElement(t);if(c)e.className=c;if(x!=null)e.textContent=x;return e};
 let changed={},orig={},LISTS={},dirtyL=new Set();
@@ -76,6 +76,7 @@ async function start(){
    seed:d=>[...d.querySelectorAll('[data-list=badges] span')].map(t=>({text:t.textContent.trim()}))},
   catalogs:{title:'📄 الكتالوجات',sub:'ارفع ملف PDF لكل كتالوج (حتى 25MB) أو ضع رابطاً.',item:'كتالوج',fields:[['title','العنوان'],['note','وصف قصير (مثل: PDF · 4 MB)'],['media','ملف PDF','file'],['url','أو رابط خارجي']],
    seed:d=>[...d.querySelectorAll('[data-list=catalogs] .ccard')].map(c=>({title:c.querySelector('b')?.textContent.trim()||'',note:c.querySelector('small')?.textContent.trim()||'',media:null,url:'/'+(c.getAttribute('href')||'')}))}});
+ IMGV=data.img||{};
  for(const[k,S]of Object.entries(SCH)){LISTS[k]=Array.isArray(data.lists?.[k])?data.lists[k]:S.seed(doc);const p=panel('l-'+k,S.title,S.sub);drawList(k,p)}
  // quotes inbox
  const pq=panel('quotes','📥 طلبات عروض الأسعار','الطلبات المرسلة من نموذج الموقع.');const qbox=mk('div');pq.appendChild(qbox);
@@ -125,7 +126,7 @@ function drawList(k,p){const S=SCH_G[k];p.querySelectorAll('.litem,.addrow').for
   up.onclick=()=>{[L[i-1],L[i]]=[L[i],L[i-1]];markL(k);drawList(k,p)};dn.onclick=()=>{[L[i+1],L[i]]=[L[i],L[i+1]];markL(k);drawList(k,p)};
   del.onclick=()=>{if(confirm(`حذف ${S.item} ${i+1}؟`)){L.splice(i,1);markL(k);drawList(k,p)}};tl.append(up,dn,del);h.appendChild(tl);box.appendChild(h);
   S.fields.forEach(([f,lab,type])=>{box.appendChild(mk('div','orig',lab));
-   if(type==='image'||type==='file'){const row=mk('div','mrow');let pv;if(type==='image'){pv=mk('img','mprev');if(it[f])pv.src=`/api/media?id=${it[f]}`;row.appendChild(pv)}else{row.appendChild(mk('span','hint',it[f]?'✓ ملف مرفوع':'لا يوجد ملف'))}
+   if(type==='image'||type==='file'){const row=mk('div','mrow');let pv;if(type==='image'){pv=mk('img','mprev');const fk=k==='products'?['ppr','pex','rad','brass'][i]:null;if(it[f])pv.src=`/api/media?id=${it[f]}`;else if(fk&&IMGV[fk])pv.src=`/api/image?k=${fk}&v=${IMGV[fk]}`;row.appendChild(pv)}else{row.appendChild(mk('span','hint',it[f]?'✓ ملف مرفوع':'لا يوجد ملف'))}
     const lb=mk('label','pri addbtn',type==='image'?'📤 صورة':'📤 ملف PDF');const inp=mk('input');inp.type='file';inp.accept=type==='image'?'image/*':'application/pdf';inp.className='hide';lb.appendChild(inp);
     inp.onchange=async()=>{const fl=inp.files[0];if(!fl)return;lb.firstChild.textContent='⏳ جارٍ الرفع…';try{it[f]=await upMedia(fl,type==='image');markL(k);msg('تم الرفع — اضغط حفظ');drawList(k,p)}catch(e){alert('تعذر الرفع: '+e.message);lb.firstChild.textContent='📤 إعادة المحاولة'}};
     row.appendChild(lb);if(it[f]){const rm=mk('button','reset','إزالة');rm.type='button';rm.onclick=()=>{it[f]=null;markL(k);drawList(k,p)};row.appendChild(rm)}box.appendChild(row)}
