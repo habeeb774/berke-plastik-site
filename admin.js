@@ -91,8 +91,8 @@ async function start(){
  const all=[...doc.querySelectorAll('[data-k]')].filter(el=>!el.closest('[data-list]'));
  for(const[id,title,sub]of SECTIONS){const els=all.filter(el=>{const s=el.closest('header,footer,.agent-strip,section[id],main[id]');if(!s)return false;
    if(id==='header')return s.tagName==='HEADER';if(id==='footer')return s.tagName==='FOOTER';if(id==='bar')return s.classList.contains('agent-strip');return s.id===id&&!s.classList.contains('agent-strip')});
-  if(!els.length)continue;const p=panel(id,title,sub);
-  els.forEach(el=>{const k=el.dataset.k,o=el.textContent.trim();p.appendChild(field(k,labelFor(el),data.t[k]??o,o))})}
+  if(!els.length)continue;const host={header:'p-l-nav',footer:'p-l-footcols'}[id];let p=host&&document.getElementById(host);if(p){p.insertBefore(mk('h3','subh',id==='header'?'نصوص الشريط العلوي':'نصوص أخرى في الشريط السفلي'),p.querySelector('.litem,.addrow'))}else p=panel(id,title,sub);const anchor=host?p.querySelector('.litem,.addrow'):null;
+  els.forEach(el=>{const k=el.dataset.k,o=el.textContent.trim();const fe=field(k,labelFor(el),data.t[k]??o,o);anchor?p.insertBefore(fe,anchor):p.appendChild(fe)});if(anchor)p.insertBefore(mk('h3','subh','الروابط / الأعمدة'),anchor)}
  let t='images';try{t=localStorage.getItem('tab')||t}catch{}show(document.getElementById('p-'+t)?t:'images');updateUI();
 }
 $('#save').addEventListener('click',async()=>{const b=$('#save');b.disabled=true;b.textContent='⏳ جارٍ الحفظ…';const lists={};dirtyL.forEach(k=>lists[k]=LISTS[k]);const r=await post('/api/save',{t:changed,lists});b.textContent='💾 حفظ';
