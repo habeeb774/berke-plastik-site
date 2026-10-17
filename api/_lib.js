@@ -2,7 +2,7 @@ import { neon } from '@neondatabase/serverless';
 import crypto from 'node:crypto';
 export const sql = neon(process.env.DATABASE_URL);
 export const TEXT_KEY = /^(t\d{1,3}|s\d|title|contact|wa)$/;
-export const IMG_KEYS = ['logo','hero','proof','ppr','rad','pex','brass','std1','std2','std3','std4'];
+export const IMG_KEYS = ['logo','hero','proof','ppr','rad','pex','brass'];
 export const SESSION_HOURS = 8;
 export const sha = s => crypto.createHash('sha256').update(s).digest('hex');
 export function ip(req){ return String(req.headers['x-real-ip'] || (req.headers['x-forwarded-for']||'').split(',')[0] || '').trim().slice(0,64) || 'unknown'; }
