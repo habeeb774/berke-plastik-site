@@ -4,7 +4,7 @@ export default safe(async function(req,res){
   res.setHeader('Cache-Control','no-store');
   const admin=req.headers['x-admin']==='1';
   if(req.method==='GET'){
-    if(!admin||!sameOrigin(req)||!(await isAuthed(req))) return res.status(401).json({error:'auth'});
+    if(!admin||!(await isAuthed(req))) return res.status(401).json({error:'auth'});
     const r=await sql`select id,at,name,phone,city,ptype,details,status from quote_req order by id desc limit 300`; return res.json(r);
   }
   if(req.method!=='POST') return res.status(405).end();
