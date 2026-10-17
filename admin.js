@@ -1,6 +1,6 @@
 const SCH_G={};
 const IM=[["logo","الشعار","أعلى وأسفل الموقع","berke-logo-horizontal.png"],["hero","صورة الواجهة","الصورة الكبيرة أعلى الصفحة",""],["ppr","منتج PP-R","قسم المنتجات",""],["rad","منتج المشعات","قسم المنتجات",""],["pex","منتج PE-X","قسم المنتجات",""],["brass","منتج الوصلات النحاسية","قسم المنتجات",""],["proof","صورة «لماذا بيركة»","بجانب قائمة المميزات",""]];
-const SECTIONS=[["header","القائمة العلوية","روابط القائمة واسم الوكيل"],["home","الواجهة الرئيسية","العنوان الكبير والأزرار"],["bar","شريط الوكيل","الشريط الأزرق أسفل الواجهة"],["products","المنتجات","بطاقات المنتجات والمقاسات"],["about","عن بيركة","التعريف بالشركة والأرقام"],["why","لماذا بيركة","المميزات والشهادات"],["contact","تواصل معنا","بيانات الوكيل"],["catalogues","الكتالوجات","قسم تحميل الكتالوجات"],["footer","أسفل الموقع","بيانات الشركة والروابط"]];
+const SECTIONS=[["header","القائمة العلوية","روابط القائمة واسم الوكيل"],["home","الواجهة الرئيسية","العنوان الكبير والأزرار"],["bar","شريط الوكيل","الشريط الأزرق أسفل الواجهة"],["products","المنتجات","بطاقات المنتجات والمقاسات"],["about","عن بيركة","التعريف بالشركة والأرقام"],["why","لماذا بيركة","المميزات والشهادات"],["advantages","مزايا للمشاريع","عنوان القسم"],["history","الخط الزمني","عنوان القسم"],["projects","المشاريع","عنوان القسم"],["quote","نموذج عرض السعر","نصوص النموذج"],["contact","تواصل معنا","بيانات الوكيل"],["catalogues","الكتالوجات","قسم تحميل الكتالوجات"],["footer","أسفل الموقع","بيانات الشركة والروابط"]];
 const $=s=>document.querySelector(s),mk=(t,c,x)=>{const e=document.createElement(t);if(c)e.className=c;if(x!=null)e.textContent=x;return e};
 let changed={},orig={},LISTS={},dirtyL=new Set();
 const msg=t=>{const m=$('#msg');m.textContent=t;m.style.display='block';clearTimeout(m.t);m.t=setTimeout(()=>m.style.display='none',3500)};
@@ -62,6 +62,10 @@ async function start(){
    seed:d=>[...d.querySelectorAll('[data-list=nav] a')].map(a=>({label:a.textContent.trim(),href:a.getAttribute('href')||'#'}))},
   footcols:{title:'🔚 الشريط السفلي',sub:'أعمدة أسفل الموقع. كل سطر في الأسطر يظهر سطراً؛ لجعله رابطاً اكتب: النص | الرابط',item:'عمود',fields:[['title','عنوان العمود'],['lines','الأسطر','area']],
    seed:d=>[...d.querySelectorAll('[data-list=footcols]>div')].map(c=>({title:c.querySelector('h4')?.textContent.trim()||'',lines:[...c.querySelectorAll('p span')].map(x=>x.textContent.trim()).join('\n')}))},
+  advantages:{title:'⭐ مزايا للمشاريع',sub:'بطاقات المزايا للمقاولين.',item:'ميزة',fields:[['title','العنوان'],['desc','الوصف','area']],
+   seed:d=>[...d.querySelectorAll('[data-list=advantages] .acard')].map(c=>({title:c.querySelector('b')?.textContent.trim()||'',desc:c.querySelector('p')?.textContent.trim()||''}))},
+  timeline:{title:'🕰️ الخط الزمني',sub:'محطات تاريخ بيركة — القسم يظهر في الموقع عند إضافة أول محطة.',item:'محطة',fields:[['year','السنة'],['title','العنوان'],['desc','الوصف','area']],seed:()=>[]},
+  projects:{title:'🏢 المشاريع',sub:'مشاريع نُفّذت بمنتجات بيركة — القسم يظهر عند إضافة أول مشروع.',item:'مشروع',fields:[['media','صورة المشروع','image'],['title','اسم المشروع'],['city','المدينة'],['desc','وصف قصير','area']],seed:()=>[]},
   products:{title:'📦 المنتجات',sub:'بطاقات المنتجات — أضف/احذف/رتّب، ولكل منتج صورته.',item:'منتج',fields:[['media','صورة المنتج','image'],['title','الاسم'],['desc','الوصف','area'],['chips','المواصفات (افصل بفاصلة ,)']],
    seed:d=>[...d.querySelectorAll('[data-list=products] .pcard')].map(c=>({media:null,title:c.querySelector('h3')?.textContent.trim()||'',desc:c.querySelector('p')?.textContent.trim()||'',chips:[...c.querySelectorAll('.chips li')].map(x=>x.textContent.trim()).join(', ')}))},
   metrics:{title:'🔢 الأرقام',sub:'المربعات في قسم «عن بيركة».',item:'رقم',fields:[['value','الرقم'],['label','الوصف']],
@@ -73,6 +77,19 @@ async function start(){
   catalogs:{title:'📄 الكتالوجات',sub:'ارفع ملف PDF لكل كتالوج (حتى 25MB) أو ضع رابطاً.',item:'كتالوج',fields:[['title','العنوان'],['note','وصف قصير (مثل: PDF · 4 MB)'],['media','ملف PDF','file'],['url','أو رابط خارجي']],
    seed:d=>[...d.querySelectorAll('[data-list=catalogs] .ccard')].map(c=>({title:c.querySelector('b')?.textContent.trim()||'',note:c.querySelector('small')?.textContent.trim()||'',media:null,url:'/'+(c.getAttribute('href')||'')}))}});
  for(const[k,S]of Object.entries(SCH)){LISTS[k]=Array.isArray(data.lists?.[k])?data.lists[k]:S.seed(doc);const p=panel('l-'+k,S.title,S.sub);drawList(k,p)}
+ // quotes inbox
+ const pq=panel('quotes','📥 طلبات عروض الأسعار','الطلبات المرسلة من نموذج الموقع.');const qbox=mk('div');pq.appendChild(qbox);
+ const ST={new:'جديد',contacted:'تم التواصل',closed:'مغلق'};
+ async function loadQ(){const r=await fetch('/api/quote',{headers:{'X-Admin':'1'},cache:'no-store'});if(!r.ok){qbox.textContent='تعذر التحميل';return}const L=await r.json();qbox.textContent='';
+  const nb=L.filter(x=>x.status==='new').length;const sb=document.querySelector('.side button[data-p="quotes"] span');if(sb)sb.textContent='📥 طلبات العروض'+(nb?` (${nb})`:'');
+  if(!L.length){qbox.appendChild(mk('p','hint','لا توجد طلبات بعد.'));return}
+  L.forEach(x=>{const c=mk('div','field');const h=mk('div','fhead');h.appendChild(mk('label',null,`${x.name} — ${new Date(x.at).toLocaleString('ar-SA')}`));
+   const sel=mk('select');Object.entries(ST).forEach(([k,v])=>{const o=mk('option',null,v);o.value=k;if(x.status===k)o.selected=true;sel.appendChild(o)});sel.onchange=async()=>{await post('/api/quote',{action:'status',id:x.id,status:sel.value});loadQ()};
+   const del=mk('button','reset','🗑 حذف');del.type='button';del.onclick=async()=>{if(confirm('حذف الطلب؟')){await post('/api/quote',{action:'delete',id:x.id});loadQ()}};
+   const tl=mk('div','ctools');tl.append(sel,del);h.appendChild(tl);c.appendChild(h);
+   const ph=String(x.phone||'');const lk=mk('div','mrow');const t=mk('a',null,'📞 '+ph);t.href='tel:'+ph;const w=mk('a',null,'واتساب');let n=ph.replace(/\D/g,'');if(n.startsWith('05'))n='966'+n.slice(1);w.href='https://wa.me/'+n;w.target='_blank';w.rel='noopener';lk.append(t,w);c.appendChild(lk);
+   c.appendChild(mk('div','orig',`المدينة: ${x.city||'—'} · النوع: ${x.ptype||'—'}`));if(x.details)c.appendChild(mk('p',null,x.details));if(x.status==='new')c.classList.add('changed');qbox.appendChild(c)})}
+ loadQ();
  // general
  const pg=panel('general','⚙️ إعدادات عامة','عنوان الصفحة ورابط التواصل.');
  const ot=doc.title,oc=doc.querySelector('[data-contact]')?.getAttribute('href')||'';
