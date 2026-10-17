@@ -56,3 +56,4 @@ h1,h2,h3,.hero h1,.hero h1>span{font-weight:600!important}
 .products,.catalogs,.intro,.proof,.adv,.tl,.projects,.quotesec,.contact{padding:56px 0}
 .products+.intro,.intro+.proof,.proof+.catalogs{padding-top:16px}
 @media(max-width:800px){.products,.catalogs,.intro,.proof,.adv,.tl,.projects,.quotesec,.contact{padding:40px 0}}
+@media(min-width:801px){.nav{display:grid;grid-template-columns:1fr auto 1fr}.nav .links{margin:0;justify-content:center}.nav .agent{justify-self:end}.nav .logo{justify-self:start}.hamb{display:none}}
