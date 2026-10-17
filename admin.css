@@ -82,3 +82,8 @@ header .brand h1{font-size:14px;margin:0;line-height:1.3}
 header .brand small{color:var(--mut);font-size:11.5px}
 .ptitle{font-size:15px}
 @media(max-width:600px){header .brand small{display:none}header .brand{padding-inline-end:10px}}
+/* compact sidebar + no scrollbars */
+.side{gap:0;padding:8px}
+.side button{padding:6px 12px;font-size:13.5px;border-radius:10px}
+.sgroup{padding:8px 12px 2px;font-size:10.5px}
+*{scrollbar-width:none}::-webkit-scrollbar{width:0!important;height:0!important;display:none}
