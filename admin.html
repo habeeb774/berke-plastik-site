@@ -4,7 +4,7 @@
 <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data: blob:; connect-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'">
 <title>لوحة إدارة موقع بيركة</title><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;700&display=swap"><link rel="stylesheet" href="admin.css"><script src="admin.js" defer></script></head>
 <body>
-<header><div class="brand"><img src="berke-logo.png" alt=""><h1>لوحة إدارة بيركة</h1></div>
+<header><div class="brand"><img src="berke-logo.png" alt=""><div><h1>لوحة إدارة بيركة</h1><small>الوكيل: السويد للسباكة</small></div></div>
 <div class="ptitle" id="ptitle"></div><div id="bar" class="hide"><span id="count" class="count"></span><button class="ghost" id="theme" type="button" title="فاتح / داكن">☀</button><a href="/" target="_blank" rel="noopener" class="ghost">عرض الموقع ↗</a><button class="ghost" id="pwbtn" type="button">تغيير الرمز</button><button class="ghost hide" id="out">خروج</button><button class="sav" id="save" disabled>حفظ التغييرات</button></div></header>
 <form class="card login" id="login"><img src="berke-logo.png" alt=""><h2>تسجيل الدخول</h2><input type="password" id="pw" placeholder="كلمة المرور" autocomplete="current-password" required><button class="pri" type="submit">دخول</button><p id="err" class="err"></p></form>
 <div id="ui" class="layout hide"><nav id="side" class="side"></nav><main id="panels"></main></div>
