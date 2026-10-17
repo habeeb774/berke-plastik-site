@@ -10,9 +10,8 @@ $('#login').addEventListener('submit',async e=>{e.preventDefault();$('#err').tex
  if(r.ok)start();else $('#err').textContent=(await r.json().catch(()=>({}))).error||'خطأ'});
 $('#out').addEventListener('click',async()=>{await fetch('/api/login',{method:'DELETE',headers:{'X-Admin':'1'}});location.reload()});
 fetch('/api/login').then(r=>r.json()).then(d=>{if(d.ok)start()});
-function labelFor(el){const p=el.parentElement,c=p.closest('.metric,.ticks>div,.badge,.quote,.agent,.btn,.tag,.eyebrow,nav,h1,h2,h3,h4,.bar>div,.dl a,p,span.agent');
- if(!c)return'نص';if(c.matches('.btn,.dl a'))return'زر';if(c.matches('nav'))return'رابط في القائمة';if(c.matches('h1'))return'العنوان الرئيسي';if(c.matches('h2'))return'عنوان القسم';if(c.matches('h3'))return'عنوان البطاقة';if(c.matches('h4'))return'عنوان عمود';
- if(c.matches('.tag,.eyebrow'))return'عنوان صغير';if(c.matches('.metric'))return p.tagName==='B'?'رقم':'وصف الرقم';if(c.matches('.ticks>div'))return'ميزة';if(c.matches('.badge'))return'الشارة على الصورة';if(c.matches('.quote'))return'اقتباس';if(c.matches('.agent'))return'اسم الوكيل';if(c.matches('.std'))return'اسم المعيار (يظهر إذا لم يُرفع شعار)';if(c.matches('.chips li'))return'مواصفة';if(c.matches('.certs span'))return'شهادة';if(c.matches('.ccard'))return'بطاقة كتالوج';if(c.matches('.agent-strip strong,.agent-strip span'))return'نص الشريط';if(c.matches('p'))return'فقرة';return'نص'}
+function labelFor(el){const p=el.parentElement;const R=[['.agent-strip strong,.agent-strip span','نص الشريط'],['.btn','زر'],['nav','رابط في القائمة'],['.agent','اسم الوكيل'],['h1','العنوان الرئيسي'],['h2','عنوان القسم'],['h3','عنوان'],['h4','عنوان عمود'],['.tag,.eyebrow','عنوان صغير'],['.quote','اقتباس'],['p','فقرة']];
+ for(const[sel,l]of R)if(p.closest(sel))return l;return'نص'}
 function updateUI(){const n=Object.keys(changed).length+dirtyL.size;$('#save').disabled=!n;$('#count').textContent=n?`${n} تعديل غير محفوظ`:'';
  document.querySelectorAll('.side button[data-p]').forEach(b=>b.querySelector('.dot').classList.toggle('show',!!document.querySelector(`#p-${b.dataset.p} .field.changed`)||dirtyL.has(b.dataset.p.replace(/^l-/,''))))}
 function field(key,label,value,original,{multi=true,ltr=false}={}){orig[key]=original;const f=mk('div','field'),h=mk('div','fhead'),l=mk('label',null,label),rs=mk('button','reset','↺ الأصل');rs.type='button';rs.title='إرجاع النص الأصلي';
@@ -29,10 +28,10 @@ async function start(){
  const doc=new DOMParser().parseFromString(html,'text/html');$('#side').textContent='';$('#panels').textContent='';changed={};
  // images
  const pi=panel('images','🖼️ الصور','اضغط على أي صورة لاختيار صورة جديدة — تُرفع وتظهر في الموقع فوراً.');const box=mk('div','imgs');pi.appendChild(box);
- for(const[k,label,where,def]of IM){const l=mk('label','img'+(k==='logo'||k.startsWith('std')?' logo':''));const img=mk('img');if(data.img[k])img.src=`/api/image?k=${k}&v=${data.img[k]}`;else if(def)img.src='/'+def;else img.src='data:image/svg+xml,'+encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" width="300" height="140"><rect width="100%" height="100%" fill="#e8eef5"/><text x="50%" y="55%" text-anchor="middle" font-family="Tahoma" font-size="15" fill="#75849a">لا توجد صورة بعد</text></svg>');img.alt=label;
+ for(const[k,label,where,def]of IM){const l=mk('label','img'+(k==='logo'?' logo':''));const img=mk('img');if(data.img[k])img.src=`/api/image?k=${k}&v=${data.img[k]}`;else if(def)img.src='/'+def;else img.src='data:image/svg+xml,'+encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" width="300" height="140"><rect width="100%" height="100%" fill="#e8eef5"/><text x="50%" y="55%" text-anchor="middle" font-family="Tahoma" font-size="15" fill="#75849a">لا توجد صورة بعد</text></svg>');img.alt=label;
   const d=mk('div');d.append(mk('b',null,label),mk('small',null,where));const st=mk('span',null,'📤 تغيير الصورة');d.appendChild(st);const inp=mk('input');inp.type='file';inp.accept='image/*';
   inp.addEventListener('change',async()=>{const f=inp.files[0];if(!f)return;st.textContent='⏳ جارٍ الرفع…';
-   try{const png=k==='logo'||k.startsWith('std');const b64=await shrink(f,png);const r=await post('/api/upload',{k,mime:png?'image/png':'image/jpeg',data:b64});
+   try{const png=k==='logo';const b64=await shrink(f,png);const r=await post('/api/upload',{k,mime:png?'image/png':'image/jpeg',data:b64});
     if(!r.ok)throw new Error((await r.json().catch(()=>({}))).error||r.status);img.src='data:image/'+(png?'png':'jpeg')+';base64,'+b64;st.textContent='✓ تم الرفع';msg('تم تحديث الصورة ✓')}
    catch(e){st.textContent='📤 تغيير الصورة';if(String(e.message)==='401'){alert('انتهت الجلسة');location.reload()}else alert('تعذر الرفع: '+e.message)}inp.value=''});
   l.append(img,d,inp);box.appendChild(l)}

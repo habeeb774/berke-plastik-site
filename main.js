@@ -19,7 +19,7 @@ fetch('/api/content').then(r=>r.ok?r.json():null).then(d=>{if(!d)return;const t=
  if(t.contact&&okUrl(t.contact))document.querySelectorAll('[data-contact]').forEach(a=>{a.href=t.contact});
  if(t.wa){const num=t.wa.replace(/\D/g,'');if(num.length>=9)document.querySelectorAll('[data-wa]').forEach(a=>{a.href='https://wa.me/'+num;a.target='_blank';a.rel='noopener noreferrer';a.classList.remove('hide')})}
  for(const[k,ver]of Object.entries(d.img||{}))document.querySelectorAll(`[data-img="${k}"]`).forEach(el=>{const u=`url("/api/image?k=${k}&v=${ver}")`;
-  const plain=k==='logo'||k.startsWith('std');el.style.backgroundImage=plain?u:`linear-gradient(#071b3a33,#071b3a66),${u}`;if(k.startsWith('std'))el.classList.add('has-img')});
+  el.style.backgroundImage=k==='logo'?u:`linear-gradient(#071b3a33,#071b3a66),${u}`});
 }).catch(()=>{});
 fetch('/api/certs').then(r=>r.ok?r.json():null).then(list=>{const box=document.querySelector('.stds');if(!box||!Array.isArray(list)||!list.length)return;box.textContent='';
  list.forEach(c=>{const i=document.createElement('img');i.src=`/api/certs?id=${c.id}&v=${c.v}`;i.alt=c.name||'شهادة';if(c.name)i.title=c.name;i.loading='lazy';i.width=120;i.height=70;box.appendChild(i)})}).catch(()=>{});})();
