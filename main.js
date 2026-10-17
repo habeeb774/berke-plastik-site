@@ -15,7 +15,8 @@ const R={
 const okUrl=v=>/^(https:\/\/|mailto:|tel:)/i.test(v);
 fetch('/api/content').then(r=>r.ok?r.json():null).then(d=>{if(!d)return;const t=d.t||{};
  for(const[k,L]of Object.entries(d.lists||{})){const box=document.querySelector(`[data-list="${k}"]`);if(box&&R[k]&&Array.isArray(L)){box.textContent='';R[k](box,L)}}
- for(const[k,v]of Object.entries(t)){if(k==='title'){document.title=v;continue}if(k==='contact'||k==='wa')continue;document.querySelectorAll(`[data-k="${k}"]`).forEach(el=>setText(el,v))}
+ for(const[k,v]of Object.entries(t))if(k.startsWith('color_')&&/^#[0-9a-fA-F]{6}$/.test(v))document.documentElement.style.setProperty('--'+k.slice(6),v);
+ for(const[k,v]of Object.entries(t)){if(k==='title'){document.title=v;continue}if(k==='contact'||k==='wa'||k.startsWith('color_'))continue;document.querySelectorAll(`[data-k="${k}"]`).forEach(el=>setText(el,v))}
  if(t.contact&&okUrl(t.contact))document.querySelectorAll('[data-contact]').forEach(a=>{a.href=t.contact});
  if(t.wa){const num=t.wa.replace(/\D/g,'');if(num.length>=9)document.querySelectorAll('[data-wa]').forEach(a=>{a.href='https://wa.me/'+num;a.target='_blank';a.rel='noopener noreferrer';a.classList.remove('hide')})}
  for(const[k,ver]of Object.entries(d.img||{}))document.querySelectorAll(`[data-img="${k}"]`).forEach(el=>{const u=`url("/api/image?k=${k}&v=${ver}")`;
