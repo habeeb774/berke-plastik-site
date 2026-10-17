@@ -57,3 +57,14 @@ h1,h2,h3,.hero h1,.hero h1>span{font-weight:600!important}
 .products+.intro,.intro+.proof,.proof+.catalogs{padding-top:16px}
 @media(max-width:800px){.products,.catalogs,.intro,.proof,.adv,.tl,.projects,.quotesec,.contact{padding:40px 0}}
 @media(min-width:801px){.nav{display:grid;grid-template-columns:1fr auto 1fr}.nav .links{margin:0;justify-content:center}.nav .agent{justify-self:end}.nav .logo{justify-self:start}.hamb{display:none}}
+/* contact + footer balance */
+.contact-grid{grid-template-columns:1fr 1fr;gap:48px}
+.contact h2{font-weight:600}
+.cbox{background:#ffffff0d;border:1px solid #ffffff1f;border-radius:4px;padding:24px}
+.cbox .btn{flex:1 1 0;justify-content:center;font-weight:600;font-size:14.5px;padding:12px 16px}
+.cbox .small{text-align:center;color:#b7c6d8}
+.foot-grid{grid-template-columns:repeat(3,1fr);gap:48px;align-items:start}
+.footer h4{margin:0 0 12px;font-size:16px;font-weight:600}
+.footer .logo{margin-bottom:12px}
+.footer p{margin:0}
+@media(max-width:800px){.contact-grid,.foot-grid{grid-template-columns:1fr;gap:28px}.cbox{padding:18px}}
