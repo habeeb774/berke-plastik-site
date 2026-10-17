@@ -87,3 +87,18 @@ h1,h2,h3,.hero h1,.hero h1>span{font-weight:600!important}
 .ticks{font-weight:500;gap:10px;margin:16px 0 22px}
 .certs>span{border-width:1px;font-weight:600;font-size:12.5px;padding:7px 12px}
 @media(max-width:800px){.proof-grid{grid-template-columns:1fr;gap:24px}.proof-img{min-height:240px}}
+/* about balance */
+.intro h2{font-weight:600}
+.quote{font-weight:600;font-size:16px;line-height:1.8}
+.metric b{font-weight:600}
+.metric{border-top-width:2px}
+@media(max-width:800px){
+.intro h2{font-size:24px}
+.quote{font-size:15px;margin:14px 0}
+.metrics{grid-template-columns:repeat(3,1fr)!important;gap:10px;margin-top:20px}
+.metric{padding:10px 0 2px;text-align:center}
+.metric b{font-size:18px}
+.metric small{font-size:12px;line-height:1.5;display:block}
+.stds{justify-content:center;gap:8px}
+.stds img{height:46px;max-width:88px;padding:6px 8px}
+}
