@@ -1,5 +1,5 @@
 import { sql, guard, TEXT_KEY , safe, audit} from './_lib.js';
-const LISTS=['products','metrics','ticks','badges','catalogs','nav','footcols'];
+const LISTS=['products','metrics','ticks','badges','catalogs','nav','footcols','advantages','timeline','projects'];
 export default safe(async function(req,res){
   if(!(await guard(req,res))) return;
   const t=(req.body||{}).t||{}, lists=(req.body||{}).lists||{};
