@@ -160,3 +160,6 @@ function organizeSide(){const side=$('#side');const btn=id=>side.querySelector(`
  document.querySelectorAll('.panel').forEach(p=>{const id=p.id.slice(2);const b=side.querySelector(`button[data-p="${id}"] span`);if(b){const h=p.querySelector('h2');if(h)h.textContent=id==='quotes'?'طلبات عروض الأسعار':b.textContent}})}
 function shrink(file,png){return new Promise((ok,no)=>{const i=new Image();i.onload=()=>{const k=Math.min(1,(png?800:1800)/i.width),c=document.createElement('canvas');c.width=Math.round(i.width*k);c.height=Math.round(i.height*k);
  c.getContext('2d').drawImage(i,0,0,c.width,c.height);ok(c.toDataURL(png?'image/png':'image/jpeg',.85).split(',')[1])};i.onerror=()=>no(new Error('الصيغة غير مدعومة — استخدم JPG أو PNG أو WebP'));const fr=new FileReader();fr.onload=()=>{i.src=fr.result};fr.onerror=()=>no(new Error('تعذر قراءة الملف'));fr.readAsDataURL(file)})}
+
+/* theme toggle */
+(function(){var R=document.documentElement,b=document.getElementById('theme');function set(t){R.setAttribute('data-theme',t);if(b)b.textContent=t==='light'?'☾':'☀';try{localStorage.setItem('admTheme',t)}catch(e){}}var s='dark';try{s=localStorage.getItem('admTheme')||(matchMedia('(prefers-color-scheme: light)').matches?'light':'dark')}catch(e){}set(s);if(b)b.addEventListener('click',function(){set(R.getAttribute('data-theme')==='light'?'dark':'light')})})();
