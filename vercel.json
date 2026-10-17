@@ -68,5 +68,16 @@
         }
       ]
     }
-  ]
+  ],
+  "rewrites": [
+    {
+      "source": "/",
+      "destination": "/api/render"
+    }
+  ],
+  "functions": {
+    "api/render.js": {
+      "includeFiles": "template.html"
+    }
+  }
 }

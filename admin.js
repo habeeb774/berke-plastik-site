@@ -25,7 +25,7 @@ function panel(id,title,sub){const p=mk('section','panel');p.id='p-'+id;p.append
 function show(id){document.querySelectorAll('.panel').forEach(p=>p.classList.toggle('on',p.id==='p-'+id));document.querySelectorAll('.side button').forEach(b=>b.classList.toggle('on',b.dataset.p===id));window.scrollTo(0,0);try{localStorage.setItem('tab',id)}catch{}}
 async function start(){
  $('#login').classList.add('hide');$('#ui').classList.remove('hide');$('#bar').classList.remove('hide');
- const [html,data]=await Promise.all([fetch('/index.html',{cache:'no-store'}).then(r=>r.text()),fetch('/api/content',{cache:'no-store'}).then(r=>r.json())]);
+ const [html,data]=await Promise.all([fetch('/template.html',{cache:'no-store'}).then(r=>r.text()),fetch('/api/content',{cache:'no-store'}).then(r=>r.json())]);
  const doc=new DOMParser().parseFromString(html,'text/html');$('#side').textContent='';$('#panels').textContent='';changed={};
  // images
  const pi=panel('images','🖼️ الصور','اضغط على أي صورة لاختيار صورة جديدة — تُرفع وتظهر في الموقع فوراً.');const box=mk('div','imgs');pi.appendChild(box);
