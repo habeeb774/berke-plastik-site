@@ -87,3 +87,8 @@ header .brand small{color:var(--mut);font-size:11.5px}
 .side button{padding:6px 12px;font-size:13.5px;border-radius:10px}
 .sgroup{padding:8px 12px 2px;font-size:10.5px}
 *{scrollbar-width:none}::-webkit-scrollbar{width:0!important;height:0!important;display:none}
+/* fixed sidebar, no empty gap */
+@media(min-width:861px){
+.side{position:sticky;top:76px;align-self:start;height:auto;max-height:calc(100vh - 92px);overflow-y:auto}
+.sfoot{margin-top:6px}
+}
