@@ -4,11 +4,11 @@ const SECTIONS=[["header","القائمة العلوية","روابط القائ
 const $=s=>document.querySelector(s),mk=(t,c,x)=>{const e=document.createElement(t);if(c)e.className=c;if(x!=null)e.textContent=x;return e};
 let changed={},orig={},LISTS={},dirtyL=new Set();
 const msg=t=>{const m=$('#msg');m.textContent=t;m.style.display='block';clearTimeout(m.t);m.t=setTimeout(()=>m.style.display='none',3500)};
-const post=(u,b)=>fetch(u,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(b),credentials:'same-origin'});
+const post=(u,b)=>fetch(u,{method:'POST',headers:{'Content-Type':'application/json','X-Admin':'1'},body:JSON.stringify(b),credentials:'same-origin'});
 window.addEventListener('beforeunload',e=>{if(Object.keys(changed).length||dirtyL.size){e.preventDefault();e.returnValue=''}});
 $('#login').addEventListener('submit',async e=>{e.preventDefault();$('#err').textContent='';const r=await post('/api/login',{password:$('#pw').value});
  if(r.ok)start();else $('#err').textContent=(await r.json().catch(()=>({}))).error||'خطأ'});
-$('#out').addEventListener('click',async()=>{await fetch('/api/login',{method:'DELETE'});location.reload()});
+$('#out').addEventListener('click',async()=>{await fetch('/api/login',{method:'DELETE',headers:{'X-Admin':'1'}});location.reload()});
 fetch('/api/login').then(r=>r.json()).then(d=>{if(d.ok)start()});
 function labelFor(el){const p=el.parentElement,c=p.closest('.metric,.ticks>div,.badge,.quote,.agent,.btn,.tag,.eyebrow,nav,h1,h2,h3,h4,.bar>div,.dl a,p,span.agent');
  if(!c)return'نص';if(c.matches('.btn,.dl a'))return'زر';if(c.matches('nav'))return'رابط في القائمة';if(c.matches('h1'))return'العنوان الرئيسي';if(c.matches('h2'))return'عنوان القسم';if(c.matches('h3'))return'عنوان البطاقة';if(c.matches('h4'))return'عنوان عمود';
@@ -74,6 +74,9 @@ async function start(){
  const ot=doc.title,oc=doc.querySelector('[data-contact]')?.getAttribute('href')||'';
  pg.appendChild(field('title','عنوان الصفحة (يظهر في تبويب المتصفح)',data.t.title??ot,ot,{multi:false}));
  const cf=field('contact','رابط زر «تواصل معنا»',data.t.contact??oc,oc,{multi:false,ltr:true});cf.appendChild(mk('div','orig','أمثلة: https://wa.me/9665XXXXXXXX  —  mailto:info@example.com  —  tel:+9665XXXXXXXX'));pg.appendChild(cf);const wf=field('wa','رقم واتساب (يظهر زر واتساب في الموقع عند تعبئته)',data.t.wa??'','',{multi:false,ltr:true});wf.appendChild(mk('div','orig','مثال: 9665XXXXXXXX — بدون + أو أصفار في البداية'));pg.appendChild(wf);
+ const sec=mk('div','field');sec.appendChild(mk('label',null,'🔒 تغيير كلمة مرور الإدارة'));const p1=mk('input');p1.type='password';p1.placeholder='كلمة المرور الحالية';p1.autocomplete='current-password';const p2=mk('input');p2.type='password';p2.placeholder='الجديدة (10 أحرف+، حروف وأرقام)';p2.autocomplete='new-password';const p3=mk('input');p3.type='password';p3.placeholder='تأكيد الجديدة';p3.autocomplete='new-password';const pb=mk('button','pri','تغيير كلمة المرور');pb.type='button';
+ pb.onclick=async()=>{if(p2.value!==p3.value)return alert('التأكيد غير مطابق');const r=await post('/api/login',{action:'change',current:p1.value,next:p2.value});const j=await r.json().catch(()=>({}));if(r.ok){p1.value=p2.value=p3.value='';msg('تم تغيير كلمة المرور ✓ وتم تسجيل خروج الأجهزة الأخرى')}else alert(j.error||'تعذر التغيير')};
+ [p1,p2,p3].forEach(i=>{i.style.marginBottom='6px'});sec.append(p1,p2,p3,pb);pg.appendChild(sec);
  $('#side').appendChild(mk('hr'));
  // texts by section
  const all=[...doc.querySelectorAll('[data-k]')].filter(el=>!el.closest('[data-list]'));
