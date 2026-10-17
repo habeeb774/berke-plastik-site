@@ -22,7 +22,7 @@ function field(key,label,value,original,{multi=true,ltr=false}={}){orig[key]=ori
  if(value!==original){const o=mk('div','orig','الأصل: '+original.slice(0,120)+(original.length>120?'…':''));f.appendChild(o)}return f}
 function panel(id,title,sub){const p=mk('section','panel');p.id='p-'+id;p.append(mk('h2',null,title),mk('p','sub',sub));$('#panels').appendChild(p);
  const b=mk('button');b.dataset.p=id;b.append(mk('span',null,title),mk('i','dot'));b.addEventListener('click',()=>show(id));$('#side').appendChild(b);return p}
-function show(id){document.querySelectorAll('.panel').forEach(p=>p.classList.toggle('on',p.id==='p-'+id));document.querySelectorAll('.side button').forEach(b=>b.classList.toggle('on',b.dataset.p===id));window.scrollTo(0,0);try{localStorage.setItem('tab',id)}catch{}}
+function show(id){const pt=$('#ptitle'),bs=document.querySelector(`.side button[data-p="${id}"] span`);if(pt)pt.textContent=bs?bs.textContent:'';document.querySelectorAll('.panel').forEach(p=>p.classList.toggle('on',p.id==='p-'+id));document.querySelectorAll('.side button').forEach(b=>b.classList.toggle('on',b.dataset.p===id));window.scrollTo(0,0);try{localStorage.setItem('tab',id)}catch{}}
 async function start(){
  $('#login').classList.add('hide');$('#ui').classList.remove('hide');$('#bar').classList.remove('hide');
  const [html,data]=await Promise.all([fetch('/template.html',{cache:'no-store'}).then(r=>r.text()),fetch('/api/content',{cache:'no-store'}).then(r=>r.json())]);
@@ -113,7 +113,7 @@ async function start(){
  for(const[id,title,sub]of SECTIONS){const els=all.filter(el=>{const s=el.closest('header,footer,.agent-strip,section[id],main[id]');if(!s)return false;
    if(id==='header')return s.tagName==='HEADER';if(id==='footer')return s.tagName==='FOOTER';if(id==='bar')return s.classList.contains('agent-strip');return s.id===id&&!s.classList.contains('agent-strip')});
   if(!els.length)continue;const host={header:'p-l-nav',footer:'p-l-footcols',products:'p-l-products',about:'p-l-metrics',why:'p-l-ticks',catalogues:'p-l-catalogs',advantages:'p-l-advantages',history:'p-l-timeline',projects:'p-l-projects'}[id];let p=host&&document.getElementById(host);if(p){p.insertBefore(mk('h3','subh','العناوين والنصوص'),p.querySelector('.litem,.addrow'))}else p=panel(id,title,sub);const anchor=host?p.querySelector('.litem,.addrow'):null;
-  els.forEach(el=>{const k=el.dataset.k,o=el.textContent.trim();const fe=field(k,labelFor(el),data.t[k]??o,o);anchor?p.insertBefore(fe,anchor):p.appendChild(fe)});if(anchor)p.insertBefore(mk('h3','subh','الروابط / الأعمدة'),anchor)}
+  els.forEach(el=>{const k=el.dataset.k,o=el.textContent.trim();const fe=field(k,labelFor(el),data.t[k]??o,o);anchor?p.insertBefore(fe,anchor):p.appendChild(fe)});if(anchor)p.insertBefore(mk('h3','subh','العناصر'),anchor)}
  organizeSide();let t='quotes';try{t=localStorage.getItem('tab')||t}catch{}show(document.getElementById('p-'+t)?t:'quotes');updateUI();
 }
 $('#save').addEventListener('click',async()=>{const b=$('#save');b.disabled=true;b.textContent='جارٍ الحفظ…';const lists={};dirtyL.forEach(k=>lists[k]=LISTS[k]);const r=await post('/api/save',{t:changed,lists});b.textContent='حفظ التغييرات';
