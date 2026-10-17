@@ -68,3 +68,15 @@ h1,h2,h3,.hero h1,.hero h1>span{font-weight:600!important}
 .footer .logo{margin-bottom:12px}
 .footer p{margin:0}
 @media(max-width:800px){.contact-grid,.foot-grid{grid-template-columns:1fr;gap:28px}.cbox{padding:18px}}
+/* quote + catalogs balance */
+.qgrid{grid-template-columns:1fr 1.6fr;gap:48px}
+.quotesec h2{font-size:clamp(24px,2.6vw,32px);font-weight:600;line-height:1.4}
+.qform{background:var(--p);border:1px solid var(--line);border-radius:4px;padding:24px;gap:16px}
+.qform label{font-weight:500;color:var(--n)}
+.qform input,.qform select,.qform textarea{background:#fff;min-height:46px}
+.qform textarea{resize:none;min-height:110px}
+.qform button{font-weight:600;min-height:48px}
+.ccard{padding:22px 24px;gap:4px}
+.ccard b{font-weight:600;font-size:17px}
+.ccard>span{font-weight:600}
+@media(max-width:800px){.qform{padding:16px}}
