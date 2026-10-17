@@ -103,14 +103,14 @@ async function start(){
  const sec=mk('div','field');sec.id='pwsec';sec.appendChild(mk('label',null,'🔒 تغيير كلمة مرور الإدارة'));const p1=mk('input');p1.type='password';p1.placeholder='كلمة المرور الحالية';p1.autocomplete='current-password';const p2=mk('input');p2.type='password';p2.placeholder='الجديدة (10 أحرف+، حروف وأرقام)';p2.autocomplete='new-password';const p3=mk('input');p3.type='password';p3.placeholder='تأكيد الجديدة';p3.autocomplete='new-password';const pb=mk('button','pri','تغيير كلمة المرور');pb.type='button';
  pb.onclick=async()=>{if(p2.value!==p3.value)return alert('التأكيد غير مطابق');const r=await post('/api/login',{action:'change',current:p1.value,next:p2.value});const j=await r.json().catch(()=>({}));if(r.ok){p1.value=p2.value=p3.value='';msg('تم تغيير كلمة المرور ✓ وتم تسجيل خروج الأجهزة الأخرى')}else alert(j.error||'تعذر التغيير')};
  [p1,p2,p3].forEach(i=>{i.style.marginBottom='6px'});sec.append(p1,p2,p3,pb);pg.appendChild(sec);
- $('#side').appendChild(mk('hr'));
+ 
  // texts by section
  const all=[...doc.querySelectorAll('[data-k]')].filter(el=>!el.closest('[data-list]'));
  for(const[id,title,sub]of SECTIONS){const els=all.filter(el=>{const s=el.closest('header,footer,.agent-strip,section[id],main[id]');if(!s)return false;
    if(id==='header')return s.tagName==='HEADER';if(id==='footer')return s.tagName==='FOOTER';if(id==='bar')return s.classList.contains('agent-strip');return s.id===id&&!s.classList.contains('agent-strip')});
-  if(!els.length)continue;const host={header:'p-l-nav',footer:'p-l-footcols'}[id];let p=host&&document.getElementById(host);if(p){p.insertBefore(mk('h3','subh',id==='header'?'نصوص الشريط العلوي':'نصوص أخرى في الشريط السفلي'),p.querySelector('.litem,.addrow'))}else p=panel(id,title,sub);const anchor=host?p.querySelector('.litem,.addrow'):null;
+  if(!els.length)continue;const host={header:'p-l-nav',footer:'p-l-footcols',products:'p-l-products',about:'p-l-metrics',why:'p-l-ticks',catalogues:'p-l-catalogs',advantages:'p-l-advantages',history:'p-l-timeline',projects:'p-l-projects'}[id];let p=host&&document.getElementById(host);if(p){p.insertBefore(mk('h3','subh','العناوين والنصوص'),p.querySelector('.litem,.addrow'))}else p=panel(id,title,sub);const anchor=host?p.querySelector('.litem,.addrow'):null;
   els.forEach(el=>{const k=el.dataset.k,o=el.textContent.trim();const fe=field(k,labelFor(el),data.t[k]??o,o);anchor?p.insertBefore(fe,anchor):p.appendChild(fe)});if(anchor)p.insertBefore(mk('h3','subh','الروابط / الأعمدة'),anchor)}
- let t='images';try{t=localStorage.getItem('tab')||t}catch{}show(document.getElementById('p-'+t)?t:'images');updateUI();
+ organizeSide();let t='quotes';try{t=localStorage.getItem('tab')||t}catch{}show(document.getElementById('p-'+t)?t:'quotes');updateUI();
 }
 $('#save').addEventListener('click',async()=>{const b=$('#save');b.disabled=true;b.textContent='⏳ جارٍ الحفظ…';const lists={};dirtyL.forEach(k=>lists[k]=LISTS[k]);const r=await post('/api/save',{t:changed,lists});b.textContent='💾 حفظ';
  if(r.ok){changed={};dirtyL.clear();document.querySelectorAll('.field.changed').forEach(e=>e.classList.remove('changed'));updateUI();msg('تم الحفظ ✓ يظهر في الموقع خلال ثوانٍ')}
@@ -139,5 +139,15 @@ async function upMedia(file,isImg){
  let r=await post('/api/media',{action:'new',name:file.name,mime:'application/pdf',data:b64(buf.subarray(0,CH))});let j=await r.json();if(!r.ok)throw new Error(j.error||r.status);const id=j.id;
  for(let o=CH;o<buf.length;o+=CH){msg(`رفع ${Math.round(o/buf.length*100)}%`);r=await post('/api/media',{action:'append',id,data:b64(buf.subarray(o,o+CH))});if(!r.ok)throw new Error((await r.json().catch(()=>({}))).error||r.status)}
  return id}
+
+function organizeSide(){const side=$('#side');const btn=id=>side.querySelector(`button[data-p="${id}"]`);
+ const G=[['عام',[['quotes','📥 طلبات العروض'],['general','⚙️ الإعدادات والألوان']]],
+  ['محتوى الصفحة',[['home','الواجهة'],['bar','شريط الوكيل'],['l-products','المنتجات'],['l-advantages','مزايا المشاريع'],['l-metrics','عن بيركة'],['l-timeline','الخط الزمني'],['l-ticks','لماذا بيركة'],['l-badges','شارات المعايير'],['l-projects','المشاريع'],['l-catalogs','الكتالوجات'],['quote','نموذج عرض السعر'],['contact','تواصل معنا']]],
+  ['القوائم',[['l-nav','الشريط العلوي'],['l-footcols','الشريط السفلي']]],
+  ['الصور والشعارات',[['images','الصور'],['certs','شعارات الشهادات']]]];
+ const rest=[...side.querySelectorAll('button[data-p]')];side.textContent='';const used=new Set();
+ G.forEach(([g,items])=>{const h=mk('div','sgroup',g);let any=false;items.forEach(([id,l])=>{const b=btn.call(null,id)||rest.find(x=>x.dataset.p===id);if(!b)return;if(!any){side.appendChild(h);any=true}b.querySelector('span').textContent=b.dataset.p==='quotes'?b.querySelector('span').textContent:l;side.appendChild(b);used.add(id)})});
+ const left=rest.filter(b=>!used.has(b.dataset.p));if(left.length){side.appendChild(mk('div','sgroup','أخرى'));left.forEach(b=>side.appendChild(b))}
+ document.querySelectorAll('.panel').forEach(p=>{const id=p.id.slice(2);const b=side.querySelector(`button[data-p="${id}"] span`);if(b&&id!=='quotes'){const h=p.querySelector('h2');if(h)h.textContent=b.textContent}})}
 function shrink(file,png){return new Promise((ok,no)=>{const i=new Image();i.onload=()=>{const k=Math.min(1,(png?800:1800)/i.width),c=document.createElement('canvas');c.width=Math.round(i.width*k);c.height=Math.round(i.height*k);
  c.getContext('2d').drawImage(i,0,0,c.width,c.height);ok(c.toDataURL(png?'image/png':'image/jpeg',.85).split(',')[1])};i.onerror=()=>no(new Error('الصيغة غير مدعومة — استخدم JPG أو PNG أو WebP'));const fr=new FileReader();fr.onload=()=>{i.src=fr.result};fr.onerror=()=>no(new Error('تعذر قراءة الملف'));fr.readAsDataURL(file)})}
