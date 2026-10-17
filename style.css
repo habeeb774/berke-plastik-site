@@ -102,3 +102,4 @@ h1,h2,h3,.hero h1,.hero h1>span{font-weight:600!important}
 .stds{justify-content:center;gap:8px}
 .stds img{height:46px;max-width:88px;padding:6px 8px}
 }
+@media(max-width:800px){.qgrid{grid-template-columns:1fr!important;gap:20px}.quotesec h2{font-size:24px}.qform{grid-template-columns:1fr!important}}
