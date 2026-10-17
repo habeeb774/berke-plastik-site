@@ -68,3 +68,4 @@ header{padding:12px 24px;padding-right:318px}
 :root[data-theme=light] ::-webkit-scrollbar-thumb{background:#c9d0dc}
 :root[data-theme=light] .pri{color:#fff}
 #theme{min-width:38px;justify-content:center}
+textarea{resize:none}
