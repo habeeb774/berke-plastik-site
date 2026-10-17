@@ -1,7 +1,7 @@
 import { neon } from '@neondatabase/serverless';
 import crypto from 'node:crypto';
 export const sql = neon(process.env.DATABASE_URL);
-export const TEXT_KEY = /^(t\d{1,3}|x\d{1,2}|s\d|title|contact|wa|color_(?:n|b|c|p|f|wa))$/;
+export const TEXT_KEY = /^(t\d{1,3}|x\d{1,2}|s\d|title|contact|wa|font|color_(?:n|b|c|p|f|wa))$/;
 export const IMG_KEYS = ['logo','hero','proof','ppr','rad','pex','brass'];
 export const SESSION_HOURS = 8;
 export const sha = s => crypto.createHash('sha256').update(s).digest('hex');
