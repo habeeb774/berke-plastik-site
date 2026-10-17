@@ -1,8 +1,8 @@
 import { neon } from '@neondatabase/serverless';
 import crypto from 'node:crypto';
 export const sql = neon(process.env.DATABASE_URL);
-export const TEXT_KEY = /^(t\d{1,3}|title|contact|wa)$/;
-export const IMG_KEYS = ['logo','hero','proof','ppr','rad','pex','brass'];
+export const TEXT_KEY = /^(t\d{1,3}|s\d|title|contact|wa)$/;
+export const IMG_KEYS = ['logo','hero','proof','ppr','rad','pex','brass','std1','std2','std3','std4'];
 const sign = s => crypto.createHmac('sha256', process.env.SESSION_SECRET).update(s).digest('hex');
 export function makeToken(){ const exp = String(Date.now() + 8*3600e3); return exp + '.' + sign(exp); }
 export function isAuthed(req){
