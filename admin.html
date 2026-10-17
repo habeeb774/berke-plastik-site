@@ -1,0 +1,13 @@
+<!doctype html>
+<html lang="ar" dir="rtl"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data: blob:; connect-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'">
+<title>لوحة إدارة موقع بيركة</title><link rel="stylesheet" href="admin.css"><script src="admin.js" defer></script></head>
+<body>
+<header><h1>لوحة إدارة موقع بيركة</h1><div id="bar" class="hide"><a href="/" target="_blank" rel="noopener" class="ghost">عرض الموقع ↗</a> <button class="sav" id="save" disabled>💾 حفظ النصوص</button> <button class="ghost" id="out">خروج</button></div></header>
+<main>
+<form class="card start" id="login"><h2>تسجيل الدخول</h2><input type="password" id="pw" placeholder="كلمة المرور" autocomplete="current-password" required><button class="pri" type="submit">دخول</button><p id="err" class="err"></p></form>
+<div id="ui" class="hide">
+<div class="card"><h2>الصور</h2><div class="imgs" id="imgs"></div><p class="hint">اختر صورة وتُرفع فوراً (تُصغّر تلقائياً).</p></div>
+<div class="card"><h2>إعدادات عامة</h2><label>عنوان الصفحة في المتصفح</label><input type="text" data-key="title"><label>رابط زر «تواصل معنا» (https://wa.me/9665XXXXXXXX أو mailto:...)</label><input type="text" data-key="contact" dir="ltr"></div>
+<div id="texts"></div></div></main><div id="msg"></div></body></html>
