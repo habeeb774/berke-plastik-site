@@ -28,7 +28,7 @@ section{scroll-margin-top:80px}.products,.catalogs{padding:90px 0}.intro,.proof{
 .proof-grid{display:grid;grid-template-columns:1fr 1fr;gap:70px;align-items:center}
 .proof-img{min-height:420px;border-radius:0 80px 0 0;background-color:var(--b);background-image:radial-gradient(circle at 30% 40%,#35b8df44 0 22%,transparent 23%),linear-gradient(160deg,var(--b),var(--n));background-size:cover;background-position:center}
 .ticks{display:grid;gap:12px;font-weight:700;margin:18px 0}.ticks b{color:var(--c);margin-left:9px}
-.certs{display:flex;gap:10px;flex-wrap:wrap}.certs span{border:2px solid var(--b);color:var(--b);font-weight:800;font-size:13px;padding:8px 14px;border-radius:6px}
+.certs{display:flex;gap:10px;flex-wrap:wrap}.certs>span{border:2px solid var(--b);color:var(--b);font-weight:800;font-size:13px;padding:8px 14px;border-radius:6px}
 .cgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}.ccard{background:#fff;border:1px solid var(--line);border-radius:12px;padding:24px;display:grid;gap:6px;transition:.2s;border-top:4px solid var(--b)}.ccard:hover{border-top-color:var(--c);box-shadow:0 12px 26px #071b3a12}
 .ccard b{font-size:18px}.ccard small{color:var(--m)}.ccard span{color:var(--b);font-weight:800;margin-top:8px}
 .contact{background:var(--n);color:#fff;padding:80px 0}.contact-grid{display:grid;grid-template-columns:1.2fr 1fr;gap:50px;align-items:center}.contact h2{font-size:clamp(30px,3.5vw,42px);margin:4px 0 10px}.contact p{color:#cfdcea;line-height:2}
