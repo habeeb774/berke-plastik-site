@@ -103,3 +103,15 @@ h1,h2,h3,.hero h1,.hero h1>span{font-weight:600!important}
 .stds img{height:46px;max-width:88px;padding:6px 8px}
 }
 @media(max-width:800px){.qgrid{grid-template-columns:1fr!important;gap:20px}.quotesec h2{font-size:24px}.qform{grid-template-columns:1fr!important}}
+@media(max-width:800px){
+.hero-copy{padding:32px 18px 28px}
+.hero h1{font-size:32px;margin:10px 0}
+.hero p{font-size:15px;line-height:1.9;margin:0 0 18px}
+.hero .actions{margin-top:0;gap:10px}
+.hero .actions .btn{padding:11px 12px;font-size:14px;font-weight:600}
+.hero-img{min-height:200px}
+.agent-strip .wrap{padding:14px 0;gap:6px}
+.agent-strip strong{font-size:15px;font-weight:600}
+.agent-strip .wrap>span{font-size:13.5px}
+.agent-strip .btn{padding:9px 16px;font-size:13.5px;font-weight:600;margin-top:6px}
+}
